@@ -1,0 +1,82 @@
+@import './../../App.css';
+
+
+body {
+  overflow-x: hidden;
+  background-color: #000;
+  color: white !important;
+  min-height: 230vh;
+
+  &:before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../../../public/images/stars.png') repeat top center;
+    animation: stars 20s linear infinite;
+    z-index: -1;
+  }
+}
+
+@keyframes stars {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 -2000px;
+  }
+}
+
+.table>:not(caption)>*>* {
+  background-color: #0000 !important;
+}
+
+.hover-highlight {
+  background-color: #f2f2f2;
+  padding: 2px !important;
+}
+
+.hover-highlight:hover {
+  background-color: #e6e6e6 !important;
+  cursor: pointer !important;
+}
+
+.astral-img {
+  width: 43px;
+  height: 43px;
+}
+
+.container {
+  max-width: 1720px !important;
+}
+
+.table-container {
+  height: 90%;
+}
+
+.btn {
+  margin: 15px;
+  width: 200px;
+}
+
+.list-group {
+  width: 800px;
+  margin: 0 auto;
+  margin-top: 20px !important;
+  margin-bottom: 50px !important;
+}
+
+InfoMessages {
+  margin-top: 30px;
+}
+
+.btn-success {
+  background-color: #174a33 !important
+}
+
+.btn-danger {
+  background-color: #7e1b24 !important;
+}
+
