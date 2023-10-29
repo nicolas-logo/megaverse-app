@@ -11,15 +11,3 @@ body {
   font-family: "Lato", sans-serif;
 }
 
-.images { 
-  width: 300px;
-  height: auto;
-  margin: 5px;
-  transition: transform 0.3s ease;
-}
-
-.images:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-}
-
