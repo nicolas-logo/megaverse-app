@@ -1,6 +1,6 @@
 import axios from 'axios'
 import ContentMapType from '../contentTypes/contentMap'
-import { awaitEndpointTime } from '../utils/configData'
+import { awaitEndpointTime, errorTypes } from '../utils/configData'
 
 const ROOT_API_URL = 'https://challenge.crossmint.io/api'
 
@@ -38,7 +38,9 @@ const GetMegaverse = async ({ requestToken, CANDIDATE_ID }) => {
       cancelToken: requestToken.token
     })
     if (response.data.map === null) {
-      throw new Error('This candidate already finished the challenge')
+      const candidateError = new Error('This candidate already finished the challenge')
+      candidateError.code = 'CANDIDATE_SUBMITTED'
+      throw candidateError
     }
     const responseMapped = ContentMapType(response)
     return responseMapped
@@ -158,16 +160,24 @@ const DeleteCometh = async ({ requestToken, row, column, candidateId }) => {
 }
 
 const ErrorHandler = (error) => {
+  // eslint-disable-next-line no-debugger
+  debugger
   switch (error.code) {
-    case 'ERR_CANCELED':
+    case errorTypes.ERR_CANCELED:
       return {
         error: true,
         message: 'Request canceled'
       }
-    case 'ERR_BAD_REQUEST':
+    case errorTypes.ERR_BAD_REQUEST:
       return {
         error: true,
         message: error.response.data.message
+      }
+    case errorTypes.CANDIDATE_SUBMITTED:
+      return {
+        error: true,
+        message: error.message,
+        errorCode: errorTypes.CANDIDATE_SUBMITTED
       }
     default: return { error: true, message: error.message }
   }

@@ -143,3 +143,10 @@ export const directions = [
 ]
 
 export const awaitEndpointTime = 1500
+
+export const errorTypes = {
+  ERR_CANCELED: 'ERR_CANCELED',
+  ERR_BAD_REQUEST: 'ERR_BAD_REQUEST',
+  CANDIDATE_SUBMITTED: 'CANDIDATE_SUBMITTED'
+
+}

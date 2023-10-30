@@ -4,7 +4,7 @@ import { GetRequestToken, CancelRequestToken, GetMegaverse, SavePolyanet, Delete
 import { useSelector, useDispatch } from 'react-redux'
 import { InfoMessages } from '../InfoMessages/InfoMessages'
 import MegaverseTable from '../MegaverseTable/megaverseTable'
-import { AstralObjectsKeys } from '../../utils/configData'
+import { AstralObjectsKeys, errorTypes } from '../../utils/configData'
 import { setCandidateId } from './../../redux/generalSlice'
 import { countDifferentCells } from '../../utils/utilFuctions'
 
@@ -22,6 +22,7 @@ const Megaverse = () => {
   const general = useSelector((state) => state.general)
   const [totalRequest, SetTotalRequest] = useState(0)
   const [requestCount, SetRequestCount] = useState(0)
+  const [showChangeCandidateButton, setShowChangeCandidateButton] = useState(false)
 
   // when the component is rendered, ask for a token for the requests
   // and gets the megaverse
@@ -38,6 +39,7 @@ const Megaverse = () => {
   // get megaverse from the api
   const fetchMegaverse = async () => {
     setLoading(true)
+    setShowChangeCandidateButton(false)
     setMegaverse({})
     try {
       const response = await GetMegaverse({
@@ -50,6 +52,9 @@ const Megaverse = () => {
 
         setMegaverse(response)
       } else {
+        if (response.errorCode === errorTypes.CANDIDATE_SUBMITTED) {
+          setShowChangeCandidateButton(true)
+        }
         setApiErrorMessage(response.message)
       }
     } catch (error) {
@@ -153,6 +158,7 @@ const Megaverse = () => {
             loading={loading} />}
         </div>
         <InfoMessages apiErrorMessage={apiErrorMessage} megaverse={megaverse} loading={loading} />
+        { showChangeCandidateButton && <button name='change-candidate' className='btn btn-danger' onClick={() => forgetCandidateId()}>Change Candidate Id</button>}
         <div>
         { requestCount !== 0 &&
           <div>
