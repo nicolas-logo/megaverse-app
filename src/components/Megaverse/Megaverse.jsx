@@ -62,6 +62,7 @@ const Megaverse = () => {
   // this function looks for the differences between the saved megaverse and the updated one to just update the necessary
   const saveMegaverse = async ({ megaverseUpdated }) => {
     try {
+      SetTotalRequest(0)
       const differenceCount = countDifferentCells(megaverse.contentMap, megaverseUpdated.contentMap)
 
       SetTotalRequest(differenceCount)
@@ -125,7 +126,6 @@ const Megaverse = () => {
         }
       }
       SetRequestCount(0)
-      SetTotalRequest(0)
       fetchMegaverse()
     } catch (error) {
       setApiErrorMessage(error.message)
@@ -154,7 +154,7 @@ const Megaverse = () => {
         </div>
         <InfoMessages apiErrorMessage={apiErrorMessage} megaverse={megaverse} loading={loading} />
         <div>
-        { totalRequest !== 0 &&
+        { requestCount !== 0 &&
           <div>
             <span>{requestCount} / {totalRequest}</span>
             <div className="progress">
