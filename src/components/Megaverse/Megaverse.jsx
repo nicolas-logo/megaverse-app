@@ -6,6 +6,7 @@ import { InfoMessages } from '../InfoMessages/InfoMessages'
 import MegaverseTable from '../MegaverseTable/megaverseTable'
 import { AstralObjectsKeys } from '../../utils/configData'
 import { setCandidateId } from './../../redux/generalSlice'
+import { countDifferentCells } from '../../utils/utilFuctions'
 
 import './Megaverse.scss'
 import './../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
@@ -19,6 +20,8 @@ const Megaverse = () => {
   const [apiErrorMessage, setApiErrorMessage] = useState('')
   const [megaverse, setMegaverse] = useState({})
   const general = useSelector((state) => state.general)
+  const [totalRequest, SetTotalRequest] = useState(0)
+  const [requestCount, SetRequestCount] = useState(0)
 
   // when the component is rendered, ask for a token for the requests
   // and gets the megaverse
@@ -59,6 +62,10 @@ const Megaverse = () => {
   // this function looks for the differences between the saved megaverse and the updated one to just update the necessary
   const saveMegaverse = async ({ megaverseUpdated }) => {
     try {
+      const differenceCount = countDifferentCells(megaverse.contentMap, megaverseUpdated.contentMap)
+
+      SetTotalRequest(differenceCount)
+
       setLoading(true)
       setApiErrorMessage('')
       window.scrollTo(0, 0)
@@ -82,12 +89,16 @@ const Megaverse = () => {
                 switch (oldType) {
                   case AstralObjectsKeys.POLYANET: {
                     promises.push(DeletePolyanet({ requestToken: CancelRequestToken, row, column, candidateId: general.CANDIDATE_ID }))
+                    SetRequestCount((prevRequestCount) => prevRequestCount + 1)
+                    break
                   }
                   case AstralObjectsKeys.SOLOON:
                     promises.push(DeleteSoloon({ requestToken: CancelRequestToken, row, column, candidateId: general.CANDIDATE_ID }))
+                    SetRequestCount((prevRequestCount) => prevRequestCount + 1)
                     break
                   case AstralObjectsKeys.COMETH:
                     promises.push(DeleteCometh({ requestToken: CancelRequestToken, row, column, candidateId: general.CANDIDATE_ID }))
+                    SetRequestCount((prevRequestCount) => prevRequestCount + 1)
                     break
                   default:
                     break
@@ -95,12 +106,15 @@ const Megaverse = () => {
                 break
               case AstralObjectsKeys.POLYANET:
                 promises.push(SavePolyanet({ requestToken: CancelRequestToken, row, column, candidateId: general.CANDIDATE_ID }))
+                SetRequestCount((prevRequestCount) => prevRequestCount + 1)
                 break
               case AstralObjectsKeys.SOLOON:
                 promises.push(SaveSoloon({ requestToken: CancelRequestToken, row, column, candidateId: general.CANDIDATE_ID, color: megaverseUpdated.contentMap[row][column].color }))
+                SetRequestCount((prevRequestCount) => prevRequestCount + 1)
                 break
               case AstralObjectsKeys.COMETH:
                 promises.push(SaveCometh({ requestToken: CancelRequestToken, row, column, candidateId: general.CANDIDATE_ID, direction: megaverseUpdated.contentMap[row][column].direction }))
+                SetRequestCount((prevRequestCount) => prevRequestCount + 1)
                 break
               default:
                 break
@@ -110,7 +124,8 @@ const Megaverse = () => {
           }
         }
       }
-
+      SetRequestCount(0)
+      SetTotalRequest(0)
       fetchMegaverse()
     } catch (error) {
       setApiErrorMessage(error.message)
@@ -138,6 +153,21 @@ const Megaverse = () => {
             loading={loading} />}
         </div>
         <InfoMessages apiErrorMessage={apiErrorMessage} megaverse={megaverse} loading={loading} />
+        <div>
+        { totalRequest !== 0 &&
+          <div>
+            <span>{requestCount} / {totalRequest}</span>
+            <div className="progress">
+                <div className="progress-bar progress-bar-striped progress-bar-animated"
+                  role="progressbar"
+                  aria-valuenow={requestCount}
+                  aria-valuemin="0"
+                  aria-valuemax={totalRequest}
+                  style={{ width: `${(requestCount * 100) / totalRequest}%` }}></div>
+            </div>
+          </div>
+          }
+        </div>
     </div>
   )
 }
