@@ -37,6 +37,9 @@ const GetMegaverse = async ({ requestToken, CANDIDATE_ID }) => {
     const response = await axios.get(url, {
       cancelToken: requestToken.token
     })
+    if (response.data.map === null) {
+      throw new Error('This candidate already finished the challenge')
+    }
     const responseMapped = ContentMapType(response)
     return responseMapped
   } catch (error) {
@@ -61,7 +64,7 @@ const SavePolyanet = async ({ requestToken, row, column, candidateId }) => {
   }
 }
 
-const DeletePolyanet = async ({ requestToken, row, column, candidateId, method }) => {
+const DeletePolyanet = async ({ requestToken, row, column, candidateId }) => {
   await timeout(awaitEndpointTime)
   try {
     const url = `${ROOT_API_URL}/polyanets`
