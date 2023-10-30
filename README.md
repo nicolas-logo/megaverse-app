@@ -12,7 +12,7 @@ Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ### ` docker build -t megaverse-app . `
-### ` docker run -p 80:3000 megaverse-app `
+### ` docker run -p 3000:3000 megaverse-app `
 
 In case you want to run it using Docker
 
