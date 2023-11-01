@@ -150,3 +150,5 @@ export const errorTypes = {
   CANDIDATE_SUBMITTED: 'CANDIDATE_SUBMITTED'
 
 }
+
+export const sandboxMatrixLength = 30

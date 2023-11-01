@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import { AstralObjects, AstralObjectsKeys, directions } from '../../utils/configData'
 import { cloneDeep } from 'lodash'
 
-const MegaverseTable = ({ megaverse, saveMegaverse, forgetCandidateId, loading }) => {
+const MegaverseTable = ({ megaverse, saveMegaverse, forgetCandidateId, loading, isSandbox }) => {
   const [megaverseUpdated, setMegaverseUpdated] = useState(cloneDeep(megaverse))
 
   // function to delete the adjacent moons if a planet is changed
@@ -84,11 +84,17 @@ const MegaverseTable = ({ megaverse, saveMegaverse, forgetCandidateId, loading }
       { !loading &&
         <div>
           <div className='row '>
-            <div className='btn-container'>
-              <button name='save-megaverse' className='btn btn-success' onClick={() => saveMegaverse({ megaverseUpdated }) }>Save Megaverse</button>
-              <button name='reset-megaverse' className='btn btn-danger' onClick={() => reset()}>Reset Megaverse</button>
-              <button name='change-candidate' className='btn btn-danger' onClick={() => forgetCandidateId()}>Change Candidate Id</button>
-            </div>
+            { !isSandbox &&
+              <div className='btn-container'>
+                <button name='save-megaverse' className='btn btn-success' onClick={() => saveMegaverse({ megaverseUpdated }) }>Save Megaverse</button>
+                <button name='reset-megaverse' className='btn btn-danger' onClick={() => reset()}>Reset Megaverse</button>
+                <button name='change-candidate' className='btn btn-danger' onClick={() => forgetCandidateId()}>Change Candidate Id</button>
+              </div>
+            }
+            {
+              isSandbox &&
+              <h3 className='text-warning'>This is a sandbox test, saving is disabled</h3>
+            }
           </div>
           <table className='table table-bordered table-hover'>
             <tbody>

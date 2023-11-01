@@ -6,7 +6,7 @@ import { InfoMessages } from '../InfoMessages/InfoMessages'
 import MegaverseTable from '../MegaverseTable/megaverseTable'
 import { AstralObjectsKeys, errorTypes } from '../../utils/configData'
 import { setCandidateId } from './../../redux/generalSlice'
-import { countDifferentCells } from '../../utils/utilFuctions'
+import { countDifferentCells, create2DArraySandbox } from '../../utils/utilFuctions'
 
 import './Megaverse.scss'
 import './../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
@@ -23,6 +23,7 @@ const Megaverse = () => {
   const [totalRequest, SetTotalRequest] = useState(0)
   const [requestCount, SetRequestCount] = useState(0)
   const [showChangeCandidateButton, setShowChangeCandidateButton] = useState(false)
+  const [isSandbox, setIsSandbox] = useState(false)
 
   // when the component is rendered, ask for a token for the requests
   // and gets the megaverse
@@ -145,6 +146,14 @@ const Megaverse = () => {
     dispatch(setCandidateId(null))
   }, [dispatch])
 
+  const loadSandbox = () => {
+    // eslint-disable-next-line no-debugger
+    debugger
+    const sandbox = create2DArraySandbox()
+    setIsSandbox(true)
+    setMegaverse(sandbox)
+  }
+
   return (
     <div className='table-container'>
         <div className='table-responsive'>
@@ -152,13 +161,28 @@ const Megaverse = () => {
           <Tips></Tips>
           {megaverse.contentMap?.length > 0 &&
             <MegaverseTable
-            megaverse={megaverse}
-            saveMegaverse={saveMegaverse}
-            forgetCandidateId={forgetCandidateId}
-            loading={loading} />}
+              megaverse={megaverse}
+              saveMegaverse={saveMegaverse}
+              forgetCandidateId={forgetCandidateId}
+              isSandbox={isSandbox}
+              loading={loading} />}
         </div>
         <InfoMessages apiErrorMessage={apiErrorMessage} megaverse={megaverse} loading={loading} />
-        { showChangeCandidateButton && <button name='change-candidate' className='btn btn-danger' onClick={() => forgetCandidateId()}>Change Candidate Id</button>}
+        { showChangeCandidateButton &&
+            <div>
+              <div>
+              <button
+                name='change-candidate'
+                className='btn btn-danger'
+                onClick={() => forgetCandidateId()}>Change Candidate Id</button>
+              </div>
+              {!isSandbox &&
+                <div>
+                  <span>Do you want to <a className='sandbox-link' href='' onClick={(e) => { e.preventDefault(); loadSandbox() }}>Play with the sandbox</a> instead?</span>
+                </div>
+              }
+            </div>
+        }
         <div>
         { requestCount !== 0 &&
           <div>
