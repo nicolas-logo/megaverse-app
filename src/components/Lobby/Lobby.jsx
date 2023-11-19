@@ -76,6 +76,11 @@ export const Lobby = () => {
     setCandidateIdValue(event.target.value)
   }
 
+  const handleSandboxMode = () => {
+    localStorage.setItem('CANDIDATE_ID', 'sandbox')
+    dispatch(setCandidateId(candidateIdValue))
+  }
+
   return (
     <div className="lobby">
       <h1 id="title" className="centered">
@@ -94,6 +99,10 @@ export const Lobby = () => {
             value={candidateIdValue}
             onChange={handleChange}
             onKeyDown={handleKeyPress}></input>
+          <div>
+            <span>Do you want to <a className='sandbox-link' href='' onClick={(e) => { e.preventDefault(); handleSandboxMode() }}>Play with the sandbox</a> instead?</span>
+          </div>
+
           {validateState === 'Error' && <span className='validate-text text-danger'>Wrong CANDIDATE ID</span>}
           {validateState === 'Validating' && <span className='validate-text text-warning'>Validating...</span>}
         </div>

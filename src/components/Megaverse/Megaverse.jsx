@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-fallthrough */
 import { useState, useEffect, useCallback } from 'react'
 import { GetRequestToken, CancelRequestToken, GetMegaverse, SavePolyanet, DeletePolyanet, SaveSoloon, DeleteSoloon, SaveCometh, DeleteCometh } from '../../services/megaverseService'
@@ -29,6 +30,13 @@ const Megaverse = () => {
   // and gets the megaverse
   useEffect(() => {
     requestToken = GetRequestToken()
+
+    if (general.CANDIDATE_ID === 'sandbox') {
+      setShowChangeCandidateButton(true)
+      loadSandbox()
+      return
+    }
+
     fetchMegaverse()
 
     return () => {

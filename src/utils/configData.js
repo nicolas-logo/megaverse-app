@@ -151,4 +151,4 @@ export const errorTypes = {
 
 }
 
-export const sandboxMatrixLength = 30
+export const sandboxMatrixLength = 10
